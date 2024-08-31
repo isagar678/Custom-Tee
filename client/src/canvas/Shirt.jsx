@@ -1,65 +1,70 @@
-import React, { useEffect, useState } from 'react'
+// import React, { useEffect, useState } from 'react'
 import { easing } from 'maath'
-import { useSnapshot } from 'valtio'
+import { useSnapshot } from 'valtio' //just like recoil of react 
 import { useFrame } from '@react-three/fiber'
 import { Decal, useGLTF, useTexture } from '@react-three/drei'
-
+//decal to aaply texture to rendered 3d element
+//useGltf to load 3d element
+//useTexture to load textures (logo and all) 
 import state from '../store'
 
 const Shirt = () => {
   const snap = useSnapshot(state)
-  const { nodes, materials } = useGLTF('/shirt_baked.glb')
+  const { nodes, materials } = useGLTF('/shirt_baked.glb') //available for free on sketchfab
 
   const logoTexture = snap.logoDecal ? useTexture(snap.logoDecal) : null
   const fullTexture = snap.fullDecal ? useTexture(snap.fullDecal) : null
+   
+  
+  
 
-  // Optionally set texture properties like anisotropy
-  useEffect(() => {
-    if (logoTexture) logoTexture.anisotropy = 16
-  }, [logoTexture])
-
-  useFrame((state, delta) => {
+ 
+  useFrame(() => {
     if (materials.lambert1) {
-      easing.dampC(materials.lambert1.color, snap.color, 0.25, delta)
+     
+      easing.dampC(materials.lambert1.color, snap.color, 0.25)
     }
-  })
+  }) //applying color on every rendered frame 1.starting color 2.target color 3.0.25 ms
 
   const stateString = JSON.stringify(snap)
 
-  if (!nodes || !materials) {
-    return null // or a loading indicator
-  }
-
   return (
+    <>
+    
+   
     <group key={stateString}>
       <mesh
-        castShadow
-        geometry={nodes.T_Shirt_male.geometry}
-        material={materials.lambert1}
-        material-roughness={1}
-        dispose={null}
+        
+        geometry={nodes.T_Shirt_male.geometry} //idk
+        material={materials.lambert1}       //for surface appearence eg; color,logo
+        
       >
+        {/* mesh is vertices and edges */}
         {snap.isFullTexture && fullTexture && (
           <Decal 
-            position={[0, 0, 0]}
-            rotation={[0, 0, 0]}
-            scale={1}
+            position={[0, 0, 0]} //x,y,z
+            rotation={[0, 0, 0]} //x,y,z
+            scale={1} //size
             map={fullTexture}
           />
         )}
 
         {snap.isLogoTexture && logoTexture && (
           <Decal 
-            position={[0, 0.04, 0.15]}
-            rotation={[0, 0, 0]}
-            scale={0.15}
-            map={logoTexture}
-            depthTest={false}
-            depthWrite={true}
+            position={[0, 0.09, 0.1]} //x,y,z
+            rotation={[0, 0, 0]} //rotate as per axis
+            scale={0.15} //size
+            map={logoTexture} 
+           
           />
         )}
       </mesh>
     </group>
+    <group>
+
+
+    </group>
+    </>
   )
 }
 
