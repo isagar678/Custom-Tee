@@ -1,14 +1,17 @@
-import React, { useState, useEffect } from 'react';
+
+import React, { useState } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
 import { useSnapshot } from 'valtio';
-
-import config from '../config/config';
 import state from '../store';
-import { download } from '../assets';
-import { downloadCanvasToImage, reader } from '../config/helpers';
+import {  reader } from '../config/helpers';
 import { EditorTabs, FilterTabs, DecalTypes } from '../config/constants';
 import { fadeAnimation, slideAnimation } from '../config/motion';
 import { AIPicker, ColorPicker, CustomButton, FilePicker, Tab } from '../components';
+import domtoimage from 'dom-to-image';
+import { GLTFExporter } from 'three/examples/jsm/exporters/GLTFExporter';
+import { useGLTF } from '@react-three/drei';
+import { saveAs } from 'file-saver';
+import * as THREE from 'three';
 
 const Customizer = () => {
   const snap = useSnapshot(state);
@@ -24,6 +27,44 @@ const Customizer = () => {
     stylishShirt: false,
   })
 
+
+  const handleDownload = () => {
+    const canvas = document.getElementById('canvas');
+    domtoimage.toPng(canvas).then((dataUrl) => {
+      const a = document.createElement('a');
+      a.href = dataUrl;
+      a.download = 'tshirt.png';
+      a.click();
+    });
+  };
+
+
+  const handleDownload3DModel = () => {
+    const { nodes, materials, error } = useGLTF('/shirt_baked.glb'); // Load your model
+    
+    if (error) {
+      console.error('Error loading 3D model:', error);
+      return;
+    }
+  
+    const mesh = nodes.T_Shirt_male; // Get the mesh node
+    const scene = new THREE.Scene();
+    scene.add(mesh);
+  
+    const exporter = new GLTFExporter(); // Instantiate GLTFExporter with `new`
+    exporter.parse(
+      scene,
+      (gltf) => {
+        const blob = new Blob([JSON.stringify(gltf)], { type: 'application/json' });
+        saveAs(blob, 'shirt.gltf');
+      },
+      (error) => {
+        console.error('Error exporting the model:', error);
+      }
+    );
+  };
+
+  
   // show tab content depending on the activeTab
   const generateTabContent = () => {
     switch (activeEditorTab) {
@@ -48,31 +89,39 @@ const Customizer = () => {
   }
 
   const handleSubmit = async (type) => {
-    if(!prompt) return alert("Please enter a prompt");
-
+    if (!prompt) return alert("Please enter a prompt");
+  
     try {
       setGeneratingImg(true);
-
-      const response = await fetch('http://localhost:8080/api/v1/dalle', {
+  
+      // Send prompt to your Django backend
+      const response = await fetch('http://localhost:8000/api/generate-image/', {
         method: 'POST',
         headers: {
-          'Content-Type': 'application/json'
+          'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          prompt,
-        })
-      })
-
+          prompt, // Pass the user prompt
+        }),
+      });
+  
+      // Handle the response from your backend
       const data = await response.json();
-
-      handleDecals(type, `data:image/png;base64,${data.photo}`)
+  
+      if (data.photo) {  // Expecting 'photo' as the key
+        // Apply the decal with the generated image in base64 format
+        handleDecals(type, `${data.photo}`);
+      } else {
+        alert("Failed to generate image.");
+      }
     } catch (error) {
-      alert(error)
+      alert("Error: " + error);
     } finally {
       setGeneratingImg(false);
       setActiveEditorTab("");
     }
-  }
+  };
+  
 
   const handleDecals = (type, result) => {
     const decalType = DecalTypes[type];
@@ -150,6 +199,28 @@ const Customizer = () => {
               handleClick={() => state.intro = true}
               customStyles="w-fit px-4 py-2.5 font-bold text-sm"
             />
+            <CustomButton 
+            
+              type="filled"
+              title="Download 3D"
+              handleClick={handleDownload3DModel}
+              customStyles="w-fit px-4 py-2.5 font-bold text-sm mx-4 "
+            />
+
+            <CustomButton 
+            
+            type="filled"
+            title="Download 2D"
+            handleClick={handleDownload}
+            customStyles="w-fit px-4 py-2.5 font-bold text-sm mr-4 "
+          />
+
+
+
+            
+
+
+
           </motion.div>
 
           <motion.div

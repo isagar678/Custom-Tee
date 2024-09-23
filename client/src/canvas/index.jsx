@@ -8,7 +8,7 @@ import CameraRig from './CameraRig';
 const CanvasModel = () => {
   return (
     <Canvas
-    
+      id='canvas'
       shadows
       camera={{ position: [0, 0, 0], fov: 25 }}
       gl={{ preserveDrawingBuffer: true }}

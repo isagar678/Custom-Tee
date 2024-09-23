@@ -4,7 +4,7 @@ const state=proxy({
     color:'#97b973',
     isLogoTexture:true,
     isFullTexture:false,
-    logoDecal:'./threejs.png',
-    fullDecal:'./threejs.png'
+    logoDecal:'./reactjs.png',
+    fullDecal:'./reactjs.png'
 });
 export default state;

@@ -1,0 +1,11 @@
+{
+  "version": "1.0",
+  "apis": [
+    {
+      "identifier": "starryai",
+      "source": "@starryai/v1.0#1df0q13lw0wgkx7",
+      "integrity": "sha512-wcexy0O/RoQbRt+xEJsstrjViPsD8T/GNhVeF3/kO7D6EqJfRyFtQUEY2IORkO+BVLBLouQ2Gh1mvGcoAp7/Gg==",
+      "installerVersion": "6.1.2"
+    }
+  ]
+}

@@ -3,6 +3,8 @@ import { easing } from 'maath'
 import { useSnapshot } from 'valtio' //just like recoil of react 
 import { useFrame } from '@react-three/fiber'
 import { Decal, useGLTF, useTexture } from '@react-three/drei'
+
+
 //decal to aaply texture to rendered 3d element
 //useGltf to load 3d element
 //useTexture to load textures (logo and all) 
@@ -16,6 +18,7 @@ const Shirt = () => {
   const fullTexture = snap.fullDecal ? useTexture(snap.fullDecal) : null
    
   
+
   
 
  
@@ -33,12 +36,14 @@ const Shirt = () => {
     
    
     <group key={stateString}>
-      <mesh
-        
-        geometry={nodes.T_Shirt_male.geometry} //idk
-        material={materials.lambert1}       //for surface appearence eg; color,logo
-        
+    <mesh
+        castShadow
+        geometry={nodes.T_Shirt_male.geometry}
+        material={materials.lambert1}
+        material-roughness={1}
+        dispose={null}
       >
+
         {/* mesh is vertices and edges */}
         {snap.isFullTexture && fullTexture && (
           <Decal 
@@ -64,6 +69,12 @@ const Shirt = () => {
 
 
     </group>
+    {/* <CustomButton 
+              type="filled"
+              title="Download"
+              handleClick={handleDownload}
+              customStyles="w-fit px-4 py-2.5 font-bold text-sm"
+            /> */}
     </>
   )
 }
