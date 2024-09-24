@@ -180,7 +180,8 @@ const Customizer = () => {
                   <Tab 
                     key={tab.name}
                     tab={tab}
-                    handleClick={() => setActiveEditorTab(tab.name)}
+                    handleClick={() =>
+                    activeEditorTab==tab.name? setActiveEditorTab("none"):setActiveEditorTab(tab.name)}
                   />
                 ))}
 

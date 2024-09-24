@@ -14,7 +14,8 @@ const Home = () => {
   const snap = useSnapshot(state);
 
   return (
-    <AnimatePresence>
+    
+    <AnimatePresence> 
       {snap.intro && (
         <motion.section className="home" {...slideAnimation('left')}>
           
