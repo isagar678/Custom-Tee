@@ -78,9 +78,9 @@ const Customizer = () => {
           handleSubmit={handleSubmit}
         />;
       case "download":
-        setTriggerDownload(true);  // Trigger download
-        setActiveEditorTab("");    // Reset tab after setting trigger
-        return null;  // Avoid rendering anything
+        
+        return <Download two={handleDownload} three={handleDownload3DModel} />  
+       
       default:
         return null;
     }
