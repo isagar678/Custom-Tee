@@ -200,12 +200,7 @@ const Customizer = () => {
               handleClick={() => state.intro = true}
               customStyles="w-fit px-4 py-2.5 font-bold text-sm"
             />
-            <CustomButton
-              type="filled"
-              title="Download 3D"
-              handleClick={handleDownload3DModel}
-              customStyles="w-fit px-4 py-2.5 font-bold text-sm mx-4"
-            />
+
           </motion.div>
 
           <motion.div
