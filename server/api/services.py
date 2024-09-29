@@ -11,7 +11,7 @@ def generate_image(prompt):
         # API URL and headers
         url = "https://Visionary-LLM.proxy-production.allthingsdev.co/generate"
         headers = {
-            'x-apihub-key': "s1DwsEofb4gBXUggF9trKvNRTIV4esCm8C8uoTNuPukS38wzd-",  # Use Django settings for sensitive information
+            'x-apihub-key': settings.VISIONARY_LLM_SECRET_KEY,  # Use Django settings for the API key
             'x-apihub-host': 'Visionary-LLM.allthingsdev.co',
             'x-apihub-endpoint': 'a3a236af-e072-405a-8c4c-e540af401c08'
         }
