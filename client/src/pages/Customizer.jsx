@@ -97,35 +97,38 @@ const Customizer = () => {
     if (!prompt) return alert("Please enter a prompt");
 
     try {
-      setGeneratingImg(true);
+        setGeneratingImg(true);
 
-      // Send prompt to your Django backend
-      const response = await fetch('http://localhost:8000/api/generate-image/', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          prompt, // Pass the user prompt
-        }),
-      });
+        // Send prompt to your Django backend
+        const response = await fetch('http://localhost:8000/api/generate-image/', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                prompt, // Pass the user prompt
+            }),
+        });
 
-      // Handle the response from your backend
-      const data = await response.json();
+        // Handle the response from your backend
+        const data = await response.json();
+        console.log("Response from server:", data);  // Debugging log
 
-      if (data.photo) {  // Expecting 'photo' as the key
-        // Apply the decal with the generated image in base64 format
-        handleDecals(type, `${data.photo}`);
-      } else {
-        alert("Failed to generate image.");
-      }
+        if (data.image) {  // Check for 'image'
+            // Apply the decal with the generated image in base64 format
+            handleDecals(type, `data:image/png;base64,${data.image}`); // Include prefix
+        } else {
+            alert("Failed to generate image.");
+        }
     } catch (error) {
-      alert("Error: " + error);
+        console.error("Error:", error); // Log the error for debugging
+        alert("Error: " + error);
     } finally {
-      setGeneratingImg(false);
-      setActiveEditorTab("");
+        setGeneratingImg(false);
+        setActiveEditorTab("");
     }
-  };
+};
+
 
   const handleDecals = (type, result) => {
     const decalType = DecalTypes[type];
