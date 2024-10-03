@@ -1,3 +1,7 @@
+
+require('dotenv').config({ path: '../.env' });
+
+
 const express = require('express');
 const axios = require('axios');
 const sharp = require('sharp');
@@ -7,13 +11,13 @@ const cors = require('cors');
 const app = express();
 
 // Your environment configuration, similar to Django settings
-const VISIONARY_LLM_SECRET_KEY = "s1DwsEofb4gBXUggF9trKvNRTIV4esCm8C8uoTNuPukS38wzd-"; // Ensure this is correct
-
 app.use(express.json());
 app.use(cors());
+const VISIONARY_LLM_SECRET_KEY = process.env.VISIONARY_LLM_SECRET_KEY;
 
 // Function to generate an image
 async function generateImage(prompt) {
+    console.log(VISIONARY_LLM_SECRET_KEY)
     try {
         // API URL and headers
         const url = "https://Visionary-LLM.proxy-production.allthingsdev.co/generate";
@@ -64,7 +68,6 @@ async function generateImage(prompt) {
         return null;
     }
 }
-
 // API route to call the generateImage function
 app.post('/api/generate-image/', async (req, res) => {
     console.log('Received request:', req.body);
@@ -87,5 +90,7 @@ app.post('/api/generate-image/', async (req, res) => {
 // Start the Express server
 const PORT = process.env.PORT || 8000;
 app.listen(PORT, () => {
+    console.log(VISIONARY_LLM_SECRET_KEY)
+
     console.log(`Server is running on port ${PORT}`);
 });
