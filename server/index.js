@@ -11,6 +11,7 @@ const cors = require('cors');
 const app = express();
 
 // Your environment configuration, similar to Django settings
+app.use(express.static('client/build'));
 app.use(express.json());
 app.use(cors());
 const VISIONARY_LLM_SECRET_KEY = process.env.VISIONARY_LLM_SECRET_KEY;
@@ -86,7 +87,9 @@ app.post('/api/generate-image/', async (req, res) => {
         res.status(500).json({ error: "Failed to generate image" });
     }
 });
-
+app.get('/',(req,res)=>{
+    return res.send('hello from server');
+})
 // Start the Express server
 const PORT = process.env.PORT || 8000;
 app.listen(PORT, () => {
