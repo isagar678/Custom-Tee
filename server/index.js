@@ -88,7 +88,10 @@ app.post('/api/generate-image/', async (req, res) => {
     }
 });
 app.get('/',(req,res)=>{
-    return res.send('hello from server');
+     res.status(200).send('hello from server');
+})
+app.get('/hello',(req,res)=>{
+    res.status(200).send('hello from server2');
 })
 // Start the Express server
 const PORT = process.env.PORT || 8000;
