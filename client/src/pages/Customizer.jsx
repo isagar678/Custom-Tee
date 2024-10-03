@@ -100,7 +100,7 @@ const Customizer = () => {
         setGeneratingImg(true);
 
         // Send prompt to your Django backend
-        const response = await fetch('http://localhost:8000/api/generate-image/', {
+        const response = await fetch('https://custom-tee-89jd.vercel.app/api/generate-image/', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
