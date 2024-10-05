@@ -18,7 +18,7 @@ const Home = () => {
     // Set a timer for 2 seconds (2000 milliseconds)
     const timer = setTimeout(() => {
       setShowComponent(true);  // Show the component after 2 seconds
-    }, 2000);
+    }, 2500);
 
     // Cleanup timer on component unmount
     return () => clearTimeout(timer);
